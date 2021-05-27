@@ -9,10 +9,23 @@
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="shortcut icon" type="image/x-icon" href="/resources/assets/img/favicon.ico">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
+<!-- CSS here -->
+<link rel="stylesheet" href="/resources/assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="/resources/assets/css/owl.carousel.min.css">
+<link rel="stylesheet" href="/resources/assets/css/slicknav.css">
+<link rel="stylesheet" href="/resources/assets/css/animate.min.css">
+<link rel="stylesheet" href="/resources/assets/css/hamburgers.min.css">
+<link rel="stylesheet" href="/resources/assets/css/magnific-popup.css">
+<link rel="stylesheet" href="/resources/assets/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/resources/assets/css/themify-icons.css">
+<link rel="stylesheet" href="/resources/assets/css/slick.css">
+<link rel="stylesheet" href="/resources/assets/css/nice-select.css">
+<link rel="stylesheet" href="/resources/assets/css/style.css">
 <script type="text/javascript">
 	$(document).ready(function(){
-		$('#btnWriteForm').on('click', function post(category_id){
+		$('#btnWriteForm').on('click', function(){
 			location.href="/post/postForm"
 		});
 		
@@ -68,10 +81,10 @@
                     <div class="row">
                         <div class="col-xl-12">
                             <div class="hero-cap hero-cap2 pt-70">
-                                <a href="/category/category"><h2>Blog</h2></a>
+                                <a href="/post/getList"><h2>Blog</h2></a>
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="index.html">category</a></li>
+                                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
                                         <li class="breadcrumb-item"><a href="#">Blog</a></li> 
                                     </ol>
                                 </nav>

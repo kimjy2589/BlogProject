@@ -22,7 +22,11 @@ public interface PostService {
 	// 총 게시글 개수 확인
 	public int getPostListCnt(Search sh) throws Exception;
 	
+	public int getPostListCateCnt(Search sh) throws Exception;
+	
 	public List<PostDTO> getPostList(Search pgn) throws Exception;
+	
+	public List<PostDTO> getPostCateList(Search pgn) throws Exception;
 	
 	// 댓글 리스트
 	public List<ReplyDTO> getReplyList(int post_id) throws Exception;

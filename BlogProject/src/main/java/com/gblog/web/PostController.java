@@ -61,6 +61,42 @@ public class PostController {
 		model.addAttribute("search", search);
 		search.setKeyword(keyword);
 		
+		int category_id = Integer.parseInt(request.getParameter("category_id"));
+		search.setCategory_id(category_id);
+		// 전체 게시글 개수
+		int listCnt = psvc.getPostListCnt(search);
+		
+		search.pageInfo(page, range, listCnt);
+		
+		// Pagination 객체 생성
+		//Pagination pgn = new Pagination();
+		//pgn.pageInfo(page, range, listCnt);
+		
+		// 페이징
+		model.addAttribute("pagination", search);
+		//게시글 화면 출력
+		
+		
+		model.addAttribute("category_id", category_id);
+		model.addAttribute("list", psvc.getPostCateList(search));
+		
+		return "post/getList";
+	}
+	
+	@RequestMapping(value = "/homeList", method = RequestMethod.GET)
+	public String homeList(Model model, HttpServletRequest request,
+			@RequestParam(required = false, defaultValue = "1") int page,
+			@RequestParam(required = false, defaultValue = "1") int range,
+			@RequestParam(required = false) String keyword,
+			@ModelAttribute("search") Search search
+			) throws Exception {
+		
+		logger.info("list 출력");
+		
+		//검색
+		model.addAttribute("search", search);
+		search.setKeyword(keyword);
+		
 		// 전체 게시글 개수
 		int listCnt = psvc.getPostListCnt(search);
 		
@@ -74,12 +110,8 @@ public class PostController {
 		model.addAttribute("pagination", search);
 		//게시글 화면 출력
 		model.addAttribute("list", psvc.getPostList(search));
-		
-		int category_id = Integer.parseInt(request.getParameter("category_id"));
-		
-		model.addAttribute("category_id", category_id);
-		
-		return "post/getList";
+	
+		return "post/homeList";
 	}
 	
 
@@ -112,7 +144,7 @@ public class PostController {
 			psvc.insertPost(pdto);
 		}
 		
-		return "redirect:/post/list";
+		return "redirect:/post/homeList";
 	}
 	
 	@RequestMapping(value = "/postContent", method = RequestMethod.GET)

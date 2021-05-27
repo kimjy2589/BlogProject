@@ -82,7 +82,7 @@
                                     <div class="main-menu d-none d-lg-block">
                                         <nav>
                                 			<ul id="navigation">                                                                                          
-			                                    <li><a href="/post/getList">Home</a></li>
+			                                    <li><a href="/post/homeList">Home</a></li>
 			                                    <li><a href="/category/category">Category</a></li>
 			                                    <li><a href="/guestbook/guestbook_form">Guest</a></li>
 			                                    <li><a href="#">About</a>

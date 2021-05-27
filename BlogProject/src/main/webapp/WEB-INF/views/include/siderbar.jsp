@@ -12,13 +12,13 @@
 	      		<button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn"
 	      			type="submit">Search
 	      		</button>
+	  		</form>
+		</aside>
 				<aside class="single_sidebar_widget">
 					<div>
 						<button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn" id="btnWriteForm" onclick="post(${category_id})" type="button">POST</button>
 					</div>
 				</aside>
-	  		</form>
-		</aside>
 		<aside class="single_sidebar_widget post_category_widget">
 	  		<h4 class="widget_title" style="color: #2d2d2d;">Category</h4>
 	  		<ul class="list cat-list">

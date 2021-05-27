@@ -53,6 +53,24 @@
 		limit #{startList}, #{listSize}
 	]]>
 	</select>
+	
+	<select id="postListCategory" resultType="com.gblog.dto.PostDTO">
+	<![CDATA[
+		select * 
+		from blog_posts
+		where category_id = #{category_id}
+	]]>
+
+		<if test="keyword != null and keyword != '' ">
+			AND (post_subj like CONCAT('%', #{keyword}, '%')
+			or post_content like CONCAT('%', #{keyword}, '%'))
+		</if>
+		
+	<![CDATA[
+		order by post_id desc, post_reg desc
+		limit #{startList}, #{listSize}
+	]]>
+	</select>
 
 	<!-- 전체 글의 개수를 읽어옴 -->
 	<select id="listCnt" resultType="int">
@@ -64,6 +82,16 @@
 				or post_content like CONCAT('%', #{keyword}, '%'))
 			</if>
 		</trim>
+	</select>
+	
+	<select id="listCntCate" resultType="int">
+		select count(*) as listCnt
+		from blog_posts 
+		where category_id = #{category_id}
+			<if test="keyword != null and keyword != '' ">
+				AND (post_subj like CONCAT('%', #{keyword}, '%')
+				or post_content like CONCAT('%', #{keyword}, '%'))
+			</if>
 	</select>
 
 </mapper>

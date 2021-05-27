@@ -13,7 +13,7 @@ public interface PostDAO {
 	public PostDTO read(Integer post_id) throws Exception;
 	
 	public List<PostDTO> list() throws Exception;
-	
+		
 	public void update(PostDTO pdto) throws Exception;
 	
 	public void delete(Integer post_id) throws Exception;
@@ -22,7 +22,11 @@ public interface PostDAO {
 	// 총 게시글 개수 확인
 	public int getPostListCnt(Search sh) throws Exception;
 	
+	public int getPostListCateCnt(Search sh) throws Exception;
+	
 	public List<PostDTO> list(Search pgn) throws Exception;
+	
+	public List<PostDTO> listCatePost(Search pgn) throws Exception;
 	
 	// 댓글 리스트
 	public List<ReplyDTO> replyList(int post_id) throws Exception;

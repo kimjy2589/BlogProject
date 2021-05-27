@@ -9,9 +9,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.gblog.common.Search;
 import com.gblog.dao.PostDAO;
 import com.gblog.dto.PostDTO;
 import com.gblog.dto.ReplyDTO;
+import com.gblog.service.PostService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/spring/root-context.xml")
@@ -41,7 +43,7 @@ public class PostDAOTest {
 //				logger.info("fail");
 //			}
 //		}
-		pdao.insertPost(pdto);
+//		pdao.insertPost(pdto);
 	}
 	
 //	@Test

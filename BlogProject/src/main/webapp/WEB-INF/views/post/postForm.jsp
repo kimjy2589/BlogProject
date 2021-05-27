@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri = "http://www.springframework.org/tags/form" %> 
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ include file="/WEB-INF/views/layout/header.jsp" %>
+<%@ include file="../include/header.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -52,8 +52,15 @@
 					<form:input path="post_subj" class="form-control" name="title" id="title" placeholder="제목을 입력해 주세요" />
 				</div>
 				<div class="mb-3">
+					<label for="category">카테고리</label> 
+					<select name="category_id" id="category_id">
+						<option value="13">post</option>
+						<option value="14">reply</option>
+						<option value="15">category</option>
+					</select>
+				</div>
+				<div class="mb-3">
 					<label for="reg_id">작성자 : ${udto.user_id }</label> 
-					
 				</div>
 				<div class="mb-3">
 					<label for="content">내용</label>

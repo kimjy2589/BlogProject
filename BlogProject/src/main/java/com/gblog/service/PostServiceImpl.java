@@ -52,11 +52,23 @@ public class PostServiceImpl implements PostService{
 		// TODO Auto-generated method stub
 		return pdao.getPostListCnt(sh);
 	}
+	
+	@Override
+	public int getPostListCateCnt(Search sh) throws Exception {
+		// TODO Auto-generated method stub
+		return pdao.getPostListCateCnt(sh);
+	}
 
 	@Override
 	public List<PostDTO> getPostList(Search pgn) throws Exception {
 		// TODO Auto-generated method stub
 		return pdao.list(pgn);
+	}
+	
+	@Override
+	public List<PostDTO> getPostCateList(Search pgn) throws Exception {
+		// TODO Auto-generated method stub
+		return pdao.listCatePost(pgn);
 	}
 
 	@Override
