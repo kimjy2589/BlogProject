@@ -227,7 +227,7 @@ public class UserController {
 				
 				lvo.setUser_pw("");	               // 인코딩된 비밀번호 정보 지움
 				session.setAttribute("udto", lvo); 	// session에 사용자의 정보 저장
-				return "redirect:/category/category";		// 메인페이지 이동  --> 나중에 메인으로 변경해야함 
+				return "redirect:/post/homeList";		// 메인페이지 이동  --> 나중에 메인으로 변경해야함 
 				
 				
 			} else {

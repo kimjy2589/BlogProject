@@ -8,9 +8,9 @@ public class PostDTO {
 	private String post_subj;
 	private String post_content;
 	private Date post_reg;
-
 	
 	private String post_img;
+	private String replyCnt;
 	
 	public PostDTO() {
 	}
@@ -71,6 +71,14 @@ public class PostDTO {
 
 	public void setPost_img(String post_img) {
 		this.post_img = post_img;
+	}
+
+	public String getReplyCnt() {
+		return replyCnt;
+	}
+
+	public void setReplyCnt(String replyCnt) {
+		this.replyCnt = replyCnt;
 	}
 
 }

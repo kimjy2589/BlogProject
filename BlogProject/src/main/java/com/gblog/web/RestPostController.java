@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,11 +34,14 @@ public class RestPostController {
 	}
 	
 	@RequestMapping(value = "/saveReply", method = RequestMethod.POST)
-	public Map<String, Object> saveReply(@RequestBody ReplyDTO rdto) throws Exception{
+	public Map<String, Object> saveReply(@RequestBody ReplyDTO rdto, HttpServletRequest request) throws Exception{
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		
 		try {
+			HttpSession session = request.getSession();
+			session.getAttribute("udto");
+			
 			psvc.insertReply(rdto);
 			result.put("status", "OK");
 		}catch(Exception e) {

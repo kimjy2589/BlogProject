@@ -28,16 +28,16 @@
 	function fn_prev(page, range, rangeSize, keyword) {
 		var page = rangeSize;
 		var range = range - 1;
-		var url = "${pageContext.request.contextPath}/post/getList";
-		url = url + "?page=" + page;
+		var url = "${pageContext.request.contextPath}/post/getList?category_id=" + ${categoryOne.category_id };
+		url = url + "&page=" + page;
 		url = url + "&range=" + range;
 		url = url + "&keyword=" + keyword;
 		location.href = url;
 	}
  	// 페이지 번호 클릭
 	function fn_pagination(page, range, rangeSize, keyword) {
-		var url = "${pageContext.request.contextPath}/post/getList";
-		url = url + "?page=" + page;
+		var url = "${pageContext.request.contextPath}/post/getList?category_id=" + ${categoryOne.category_id };
+		url = url + "&page=" + page;
 		url = url + "&range=" + range;
 		url = url + "&keyword=" + keyword;
 		location.href = url;	
@@ -46,8 +46,8 @@
 	function fn_next(page, range, rangeSize, keyword) {
 		var page = parseInt((range * rangeSize)) + 1;
 		var range = parseInt(range) + 1;
-		var url = "${pageContext.request.contextPath}/post/getList";
-		url = url + "?page=" + page;
+		var url = "${pageContext.request.contextPath}/post/getList?category_id=" + ${categoryOne.category_id };
+		url = url + "&page=" + page;
 		url = url + "&range=" + range;
 		url = url + "&keyword=" + keyword;
 		location.href = url;
@@ -55,8 +55,8 @@
 	
 	$(document).on('click', '#btnSearch', function(e){
 		e.preventDefault();
-		var url = "/post/getList"
-		url = url + "?keyword=" + $('#keyword').val();
+		var url = "/post/getList?category_id=" + ${categoryOne.category_id };
+		url = url + "&keyword=" + $('#keyword').val();
 		location.href = url;
 		console.log(url);
 	});	
@@ -68,10 +68,11 @@
                     <div class="row">
                         <div class="col-xl-12">
                             <div class="hero-cap hero-cap2 pt-70">
-                                <a href="/category/category"><h2>Blog</h2></a>
+                                <a href="/post/getList?category_id=${categoryOne.category_id }"><h2>${categoryOne.category_name }</h2></a>
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="index.html">category</a></li>
+                                        <li class="breadcrumb-item"><a href="/post/homeList">Home</a></li>
+                                        <li class="breadcrumb-item"><a href="#">Category</a></li> 
                                         <li class="breadcrumb-item"><a href="#">Blog</a></li> 
                                     </ol>
                                 </nav>
@@ -101,12 +102,12 @@
                         		<c:forEach var="list" items="${list }">
 		                            <article class="blog_item">
 		                                <div class="blog_details">
-		                                    <a class="d-inline-block" href="/post/postContent?post_id=${list.post_id }">
+		                                    <a class="d-inline-block" href="/post/postContent?post_id=${list.post_id }&category_id=${categoryOne.category_id }">
 		                                        <h2 class="blog-head" style="color: #2d2d2d;">${list.post_subj }</h2>
 		                                    </a>
-		                                    <p><c:out value="${list.post_content}" /></p>
+		                                    <%-- <p><c:out value="${list.post_content}" /></p> --%>
 		                                    <ul class="blog-info-link">
-		                                        <li><a href="#"><i class="fa fa-comments"></i> 03 Comments</a></li>
+		                                        <li><a href="#"><i class="fa fa-comments"></i> ${list.replyCnt } Comments</a></li>
 		                                    </ul>
 		                                </div>
 		                            </article>

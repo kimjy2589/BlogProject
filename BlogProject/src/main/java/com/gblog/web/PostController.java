@@ -1,5 +1,7 @@
 package com.gblog.web;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -14,6 +16,7 @@ import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +35,8 @@ import com.gblog.common.Pagination;
 import com.gblog.common.Search;
 import com.gblog.dto.PostDTO;
 import com.gblog.dto.ReplyDTO;
+import com.gblog.service.CategoryService;
+import com.gblog.service.GuestbookService;
 import com.gblog.service.PostService;
 
 @Controller
@@ -43,52 +48,23 @@ public class PostController {
 	@Inject
 	private PostService psvc;
 	
+	@Inject
+	private GuestbookService gsvc;
+	
+	@Inject
+	private CategoryService csvc;
+	
 	
 	@Resource(name="uploadPath")
     private String uploadPath;
-	
-	@RequestMapping(value = "/getList", method = RequestMethod.GET)
-	public String getList(Model model, HttpServletRequest request,
-			@RequestParam(required = false, defaultValue = "1") int page,
-			@RequestParam(required = false, defaultValue = "1") int range,
-			@RequestParam(required = false) String keyword,
-			@ModelAttribute("search") Search search
-			) throws Exception {
-		
-		logger.info("list 출력");
-		
-		//검색
-		model.addAttribute("search", search);
-		search.setKeyword(keyword);
-		
-		int category_id = Integer.parseInt(request.getParameter("category_id"));
-		search.setCategory_id(category_id);
-		// 전체 게시글 개수
-		int listCnt = psvc.getPostListCnt(search);
-		
-		search.pageInfo(page, range, listCnt);
-		
-		// Pagination 객체 생성
-		//Pagination pgn = new Pagination();
-		//pgn.pageInfo(page, range, listCnt);
-		
-		// 페이징
-		model.addAttribute("pagination", search);
-		//게시글 화면 출력
-		
-		
-		model.addAttribute("category_id", category_id);
-		model.addAttribute("list", psvc.getPostCateList(search));
-		
-		return "post/getList";
-	}
 	
 	@RequestMapping(value = "/homeList", method = RequestMethod.GET)
 	public String homeList(Model model, HttpServletRequest request,
 			@RequestParam(required = false, defaultValue = "1") int page,
 			@RequestParam(required = false, defaultValue = "1") int range,
 			@RequestParam(required = false) String keyword,
-			@ModelAttribute("search") Search search
+			@ModelAttribute("search") Search search,
+			HttpSession session
 			) throws Exception {
 		
 		logger.info("list 출력");
@@ -110,25 +86,68 @@ public class PostController {
 		model.addAttribute("pagination", search);
 		//게시글 화면 출력
 		model.addAttribute("list", psvc.getPostList(search));
-	
+		
+	    gsvc.insertdate();
+	    int totalcount = gsvc.visitTotal();
+	    int todaycount = gsvc.visitToday();
+	  
+	    session.setAttribute("totalCount", totalcount);
+	    session.setAttribute("todayCount", todaycount);
+	  
+	    model.addAttribute("category_list", csvc.CategoryList());
+		
 		return "post/homeList";
 	}
 	
-
-//	@ResponseBody
-//	@RequestMapping(value = "/replyList", method = RequestMethod.POST)
-//	public List<ReplyDTO> replyList(@RequestParam("post_id") int post_id, Model model) 
-//			throws Exception{
-//		logger.info("...replylist post...");
-//		model.addAttribute("reList", psvc.getReplyList(post_id));
-//		return psvc.getReplyList(post_id);
-//	}
-
+	@RequestMapping(value = "/getList", method = RequestMethod.GET)
+	public String getList(Model model, HttpServletRequest request,
+			@RequestParam int category_id,
+			@RequestParam(required = false, defaultValue = "1") int page,
+			@RequestParam(required = false, defaultValue = "1") int range,
+			@RequestParam(required = false) String keyword,
+			@ModelAttribute("search") Search search
+			) throws Exception {
+		
+		logger.info("list 출력");
+		
+		//검색
+		model.addAttribute("search", search);
+		search.setKeyword(keyword);
+		search.setCategory_id(category_id);
+		System.out.println(keyword +" and " + category_id);
+		
+		//int category_id = Integer.parseInt(request.getParameter("category_id"));
+		model.addAttribute("category_id", category_id);
+		model.addAttribute("categoryOne", csvc.Read(category_id));
+		model.addAttribute("category_list", csvc.CategoryList());
+				
+		// 전체 게시글 개수
+		int listCnt = psvc.getPostListCateCnt(search);
+		
+		search.pageInfo(page, range, listCnt);
+		
+		// Pagination 객체 생성
+		//Pagination pgn = new Pagination();
+		//pgn.pageInfo(page, range, listCnt);
+		
+		// 페이징
+		model.addAttribute("pagination", search);
+		//게시글 화면 출력
+		
+		
+		model.addAttribute("list", psvc.getPostCateList(search));
+	    
+		return "post/getList";
+	}
+	
 	@RequestMapping(value = "/postForm", method = RequestMethod.GET)
-	public String postFormGet(PostDTO pdto, Model model) throws Exception{
+	public String postFormGet(PostDTO pdto, Model model, HttpServletRequest request) throws Exception{
 		logger.info("...write get...");
 		
-		model.getAttribute("category_id");
+		HttpSession session = request.getSession();
+		session.getAttribute("udto");
+		
+		model.addAttribute("CategoryList", csvc.CategoryList());
 		
 		return "post/postForm";
 	}
@@ -136,7 +155,10 @@ public class PostController {
 	@RequestMapping(value = "/savePost", method = RequestMethod.POST)
 	public String savePost(@ModelAttribute("postDTO") PostDTO pdto,
 			@RequestParam("mode") String mode,
+			//@RequestParam("category_id") int category_id,
 			RedirectAttributes rttr) throws Exception {
+		
+		//pdto.setCategory_id(category_id);
 		
 		if(mode.equals("edit")) {
 			psvc.updatePost(pdto);
@@ -144,11 +166,29 @@ public class PostController {
 			psvc.insertPost(pdto);
 		}
 		
+		//return "redirect:/post/getList?category_id="+category_id;
+		return "redirect:/post/homeList";
+	}
+	
+	// test
+	@RequestMapping(value = "/updatePost", method = RequestMethod.POST)
+	public String updatePost(@ModelAttribute("postDTO") PostDTO pdto,
+			@RequestParam("post_id") String post_id,			
+			RedirectAttributes rttr) throws Exception {
+		
+			psvc.updatePost(pdto);
+
+		//return "redirect:/post/postContent?post_id="+post_id;
 		return "redirect:/post/homeList";
 	}
 	
 	@RequestMapping(value = "/postContent", method = RequestMethod.GET)
-	public void read(@RequestParam("post_id") int post_id, Model model) throws Exception {
+	public void read(@RequestParam("post_id") int post_id, Model model, 
+			HttpServletRequest request
+			) throws Exception {
+		
+		HttpSession session = request.getSession();
+		session.getAttribute("udto");
 		
 		model.addAttribute("postDTO", psvc.getPostContent(post_id));
 		model.addAttribute("replyDTO", new ReplyDTO());
@@ -162,14 +202,20 @@ public class PostController {
 		model.addAttribute("postContent", psvc.getPostContent(post_id));
 		model.addAttribute("mode", mode);
 		model.addAttribute("postDTO", new PostDTO());
-		return "post/postForm";
+		model.addAttribute("CategoryList", csvc.CategoryList());
+		return "post/postEdit";
 	}
 	
 	@RequestMapping(value = "/deletePost", method = RequestMethod.GET)
-	public String deletePost(RedirectAttributes rttr, @RequestParam("post_id") int post_id) 
+	public String deletePost(RedirectAttributes rttr, @RequestParam("post_id") int post_id,
+			@RequestParam(required = false) Integer category_id) 
 			throws Exception {
 		psvc.deletePost(post_id);
-		return "redirect:/post/list";
+
+		if(category_id == null) {
+			return "redirect:/post/homeList";
+		}
+		return "redirect:/post/getList?category_id="+category_id;
 	}
 	
 	// ck 에디터에서 파일 업로드
